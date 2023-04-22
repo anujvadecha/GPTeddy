@@ -20,9 +20,6 @@ function submitPrompt(data){
 }
 
 export {
-    //   base_url,
-    //   place_order,
-    //   get_tickets_for_user,
     loginAdminUser,
     submitPrompt
 }

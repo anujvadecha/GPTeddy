@@ -35,7 +35,7 @@ ALLOWED_HOSTS = ["*"]
 # Application definition
 
 INSTALLED_APPS = [
-"daphne",
+    "daphne",
     'base',
     'rest_framework_simplejwt',
     'admirarchy',

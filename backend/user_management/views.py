@@ -7,6 +7,8 @@ from rest_framework.decorators import action
 
 from user_management.serializers import PromptSerializer
 
+from backend.user_management.models import Prompts
+
 
 # Create your views here.
 class OrganizationAPIView(viewsets.ViewSet):
@@ -30,4 +32,11 @@ class PromptAPIView(viewsets.ViewSet):
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response(serializer.data)
+
+    @action(detail=False, methods=['get'], url_path='get_prompt', url_name='get_prompt')
+    def get(self, request):
+        prompt = Prompts.objects.filter(user=request.user.id).last()
+        serializer = PromptSerializer(prompt)
+        return Response(serializer.data)
+
 
