@@ -22,7 +22,6 @@ function apiService(endpoint, method, data) {
   // const store = this.$store.state.token
   // console.log('inside api service token is' + store)
   // var axios = require('axios')
-  console.log("Authorization token is " + window.localStorage.getItem("token"))
   if (method === "GET") {
     console.log("here")
     console.log(data)

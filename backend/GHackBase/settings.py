@@ -54,8 +54,8 @@ INSTALLED_APPS = [
     'drf_yasg',
     'recurrence',
     'drf_spectacular',
-    "corsheaders",
     'chat',
+    "corsheaders",
 ]
 
 MIDDLEWARE = [
@@ -69,6 +69,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 CORS_ALLOW_ALL_ORIGINS = True
+CORS_ORIGIN_ALLOW_ALL = True
 # CORS_ALLOWED_ORIGINS= [ "*" ]
 ROOT_URLCONF = 'GHackBase.urls'
 

@@ -14,23 +14,15 @@ class User(AbstractUser):
 
 
 class Prompts(BaseModel):
-    prompt = models.TextField()
+    personality = models.TextField()
     user = models.ForeignKey(User, on_delete=models.CASCADE,  blank=True, null=True)
+    age = models.IntegerField(blank=True, null=True)
+    subjects = models.CharField(max_length=512, blank=True, null=True)
+    message_count = models.IntegerField(blank=True, null=True)
 
     def __str__(self):
-        return self.prompt
+        return self.personality
 
     class Meta:
         ordering = ["-created_at"]
 
-
-class Filters(BaseModel):
-    filter = models.TextField(blank=True, null=True)
-    value = models.CharField(max_length=512, blank=True, null=True)
-    prompt = models.ForeignKey(Prompts, on_delete=models.CASCADE, related_name="filters", blank=True, null=True)
-
-    def __str__(self):
-        return self.filter
-
-    class Meta:
-        ordering = ["-created_at"]
