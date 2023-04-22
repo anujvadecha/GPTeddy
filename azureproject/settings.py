@@ -174,8 +174,3 @@ REST_FRAMEWORK = {
     'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
 
 }
-
-STORAGES = {
-    "default": {"BACKEND": "storages.backends.azure_storage.AzureStorage"},
-    "staticfiles": {"BACKEND": "custom_storage.custom_azure.PublicAzureStorage"},
-}
