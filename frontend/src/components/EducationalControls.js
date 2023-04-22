@@ -1,11 +1,30 @@
 import React, { useState } from 'react';
+import Select from 'react-select';
 
 const EducationalControls = () => {
     const [personality, setPersonality] = useState('');
-    const [selectedSubjects, setSelectedSubjects] = useState([]);
     const [age, setAge] = useState('');
     const [messageCount, setMessageCount] = useState('');
     const [isDirty, setIsDirty] = useState(false);
+
+    const [selectedSubjects, setSelectedSubjects] = useState([]);
+
+    const options = [
+        { value: 'math', label: 'Math' },
+        { value: 'geography', label: 'Geography' },
+        { value: 'history', label: 'History' },
+        { value: 'english', label: 'English' },
+        { value: 'science', label: 'Science' },
+        { value: 'art', label: 'Art' },
+    ];
+
+    const handleChange = (selectedOptions) => {
+        setSelectedSubjects(selectedOptions);
+    };
+
+    const handleRemove = (removedOption) => {
+        setSelectedSubjects(selectedSubjects.filter((option) => option.value !== removedOption.value));
+    };
 
     const handleInputChange = (event) => {
         const { name, value } = event.target;
@@ -47,23 +66,39 @@ const EducationalControls = () => {
                         onChange={handleInputChange}
                     ></textarea>
                 </div>
+
+
                 <div className="mb-4">
-                    <label htmlFor="selectedSubjects" className="block font-bold mb-2">
+                    <label htmlFor="subjects" className="block font-bold mb-2">
                         Subjects
                     </label>
-                    <select
-                        id="selectedSubjects"
-                        name="selectedSubjects"
-                        className="w-full h-10 px-3 py-2 border rounded-lg"
+                    <Select
+                        id="subjects"
+                        name="subjects"
                         value={selectedSubjects}
-                        onChange={handleInputChange}
-                        multiple
-                    >
-                        <option value="math">Math</option>
-                        <option value="geography">Geography</option>
-                        <option value="history">History</option>
-                    </select>
+                        options={options}
+                        onChange={handleChange}
+                        isMulti
+                        className="w-full"
+                    />
+                    <div className="flex flex-wrap mt-2">
+                        {selectedSubjects.map((option) => (
+                            <div key={option.value} className="inline-flex items-center bg-gray-200 rounded-md px-2 py-1 mt-2 mr-2">
+                                <span className="text-sm font-medium text-gray-800 mr-1">{option.label}</span>
+                                <button type="button" className="text-gray-600 hover:text-gray-800 focus:outline-none" onClick={() => handleRemove(option)}>
+                                    <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24">
+                                        <path
+                                            fillRule="evenodd"
+                                            d="M12 2C6.485 2 2 6.485 2 12s4.485 10 10 10 10-4.485 10-10S17.515 2 12 2zm4.95 12.243l-1.707 1.707L12 13.414l-3.243 3.536-1.707-1.707L10.293 12 6.757 8.464l1.707-1.707L12 10.586l3.536-3.243 1.707 1.707L13.707 12l3.536 3.536z"
+                                            clipRule="evenodd"
+                                        />
+                                    </svg>
+                                </button>
+                            </div>
+                        ))}
+                    </div>
                 </div>
+
                 <div className="mb-4">
                     <label htmlFor="age" className="block font-bold mb-2">
                         Age
