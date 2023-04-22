@@ -1,3 +1,5 @@
+import json
+
 from django.shortcuts import render
 from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated
@@ -29,7 +31,7 @@ class PromptAPIView(viewsets.ViewSet):
         data = request.data
         data["user"] = request.user.id
         # List to comma seperated string
-        data["subjects"] = str(data["subjects"])
+        data["subjects"] = json.dumps(data["subjects"])
         serializer = PromptSerializer(data=data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
