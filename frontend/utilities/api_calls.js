@@ -6,7 +6,7 @@ const base_url = 'http://localhost:8000'
 // const base_websocket_url = 'localhost:9000'
 //
 
-function loginAdminUser () {
+function loginAdminUser() {
     var user = {
         "username": "admin",
         "password": "admin"
@@ -15,43 +15,43 @@ function loginAdminUser () {
     return apiService(endpoint, 'POST', user)
 }
 
-function createAvailability(data){
+function createAvailability(data) {
     const endpoint = base_url + '/reservation/create_availability/'
     return apiService(endpoint, 'POST', data)
 }
 
-function createReservation(data){
+function createReservation(data) {
     const endpoint = base_url + '/reservation/reserve/'
     return apiService(endpoint, 'POST', data)
 }
 
-function getReservations(data){
+function getReservations(data) {
     const endpoint = base_url + '/reservation/reservations'
     return apiService(endpoint, 'GET', data)
 }
 
-function getOrganizations(){
+function getOrganizations() {
     const endpoint = base_url + '/user/organizations/organization-list'
     return apiService(endpoint, 'GET', null)
 }
-function getResources(data){
+function getResources(data) {
     const endpoint = base_url + '/resources/resource-list-organization'
     return apiService(endpoint, 'GET', data)
 }
-function addParticipants(data){
+function addParticipants(data) {
 
 }
 
-function get_tickets_for_user () {
+function get_tickets_for_user() {
     const endpoint = base_url + '/gamemaster/tickets'
-    return apiService(endpoint, 'GET',null)
+    return apiService(endpoint, 'GET', null)
 }
 
 
 export {
-//   base_url,
-//   place_order,
-//   get_tickets_for_user,
+    //   base_url,
+    //   place_order,
+    //   get_tickets_for_user,
     loginAdminUser,
     createAvailability,
     createReservation,
