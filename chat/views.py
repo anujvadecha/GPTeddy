@@ -9,8 +9,6 @@ from chat.models import ChatModel, ChatUser
 from chat.serializers import ChatSerializer
 from rest_framework.response import Response
 
-from user_management.models import Prompts
-
 
 class ChatAPIView(viewsets.ViewSet):
 
@@ -20,8 +18,6 @@ class ChatAPIView(viewsets.ViewSet):
         # TODO add response to database
         data = request.data
         user = request.user
-        last_prompt = Prompts.objects.filter(user=user).last()
-        print(last_prompt)
         chat = ChatModel.objects.create(user=user, message=data.get("message"), from_user=ChatUser.user)
         return Response(ChatSerializer(chat).data)
 
