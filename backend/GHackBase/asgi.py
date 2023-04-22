@@ -22,6 +22,7 @@ from channels.routing import ProtocolTypeRouter, URLRouter
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "GHackBase.settings")
 django_asgi_app = get_asgi_application()
+
 import chat.routing
 
 application = ProtocolTypeRouter(
