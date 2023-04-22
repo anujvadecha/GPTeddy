@@ -26,7 +26,7 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 if 'CODESPACE_NAME' in os.environ:
     CSRF_TRUSTED_ORIGINS = [f'https://{os.getenv("CODESPACE_NAME")}-8000.{os.getenv("GITHUB_CODESPACES_PORT_FORWARDING_DOMAIN")}']
@@ -34,6 +34,14 @@ if 'CODESPACE_NAME' in os.environ:
 # Application definition
 
 INSTALLED_APPS = [
+    "daphne",
+    'base',
+    'chat',
+    'user_management',
+    'rest_framework_simplejwt',
+    'admirarchy',
+    'jazzmin',
+
     'restaurant_review.apps.RestaurantReviewConfig',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -41,9 +49,14 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'coreapi',  # Coreapi for coreapi documentation
+    'drf_yasg',
+    'drf_spectacular',
+    "corsheaders",
 ]
-
+CORS_ALLOW_ALL_ORIGINS = True
 MIDDLEWARE = [
+    "corsheaders.middleware.CorsMiddleware",
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -72,6 +85,7 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'azureproject.wsgi.application'
+AUTH_USER_MODEL = 'user_management.User'
 
 
 # Database
@@ -142,3 +156,13 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+ASGI_APPLICATION = "azureproject.asgi.application"
+
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": [("127.0.0.1", 6379)],
+        },
+    },
+}

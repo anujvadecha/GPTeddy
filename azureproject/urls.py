@@ -15,8 +15,26 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import include, path
+from django.contrib import admin
+from django.template.defaulttags import url
+from django.urls import path, re_path, include
+from django.views.generic import TemplateView
+from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView, SpectacularRedocView
+from drf_yasg import openapi
+from drf_yasg.views import get_schema_view
+from rest_framework import permissions
+from rest_framework_simplejwt import views as jwt_views
 
 urlpatterns = [
     path('', include('restaurant_review.urls')),
     path('admin/', admin.site.urls),
+    path('api/token/', jwt_views.TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('api/token/refresh/', jwt_views.TokenRefreshView.as_view(), name='token_refresh'),
+    path('admin/', admin.site.urls),
+    path('user/', include("user_management.urls")),
+    path('api/schema/', SpectacularAPIView.as_view(), name='schema'),
+    path("chat/", include("chat.urls")),
+    path('api/schema/swagger-ui/', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),
+    path('api/schema/redoc/', SpectacularRedocView.as_view(url_name='schema'), name='redoc'),
+
 ]
