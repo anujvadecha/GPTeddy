@@ -19,7 +19,14 @@ function submitPrompt(data){
     return apiService(endpoint, 'POST', data)
 }
 
+function getPrompt(){
+    const endpoint = base_url+'/user/prompts/get_prompt/'
+    return apiService(endpoint, 'GET', null)
+}
+
+
 export {
     loginAdminUser,
-    submitPrompt
+    submitPrompt,
+    getPrompt
 }
