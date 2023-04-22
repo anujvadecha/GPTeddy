@@ -15,47 +15,9 @@ function loginAdminUser () {
     return apiService(endpoint, 'POST', user)
 }
 
-function createAvailability(data){
-    const endpoint = base_url + '/reservation/create_availability/'
-    return apiService(endpoint, 'POST', data)
-}
-
-function createReservation(data){
-    const endpoint = base_url + '/reservation/reserve/'
-    return apiService(endpoint, 'POST', data)
-}
-
-function getReservations(data){
-    const endpoint = base_url + '/reservation/reservations'
-    return apiService(endpoint, 'GET', data)
-}
-
-function getOrganizations(){
-    const endpoint = base_url + '/user/organizations/organization-list'
-    return apiService(endpoint, 'GET', null)
-}
-function getResources(data){
-    const endpoint = base_url + '/resources/resource-list-organization'
-    return apiService(endpoint, 'GET', data)
-}
-function addParticipants(data){
-
-}
-
-function get_tickets_for_user () {
-    const endpoint = base_url + '/gamemaster/tickets'
-    return apiService(endpoint, 'GET',null)
-}
-
-
 export {
 //   base_url,
 //   place_order,
 //   get_tickets_for_user,
     loginAdminUser,
-    createAvailability,
-    createReservation,
-    getReservations,
-    getOrganizations,
-    getResources
 }

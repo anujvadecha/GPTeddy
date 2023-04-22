@@ -35,11 +35,13 @@ ALLOWED_HOSTS = ["*"]
 # Application definition
 
 INSTALLED_APPS = [
+"daphne",
     'base',
     'rest_framework_simplejwt',
     'admirarchy',
     'jazzmin',
     'user_management',
+
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -53,6 +55,7 @@ INSTALLED_APPS = [
     'recurrence',
     'drf_spectacular',
     "corsheaders",
+    'chat',
 ]
 
 MIDDLEWARE = [
@@ -208,3 +211,4 @@ SPECTACULAR_SETTINGS = {
     'SERVE_INCLUDE_SCHEMA': False,
     # OTHER SETTINGS
 }
+ASGI_APPLICATION = "GHackBase.asgi.application"
