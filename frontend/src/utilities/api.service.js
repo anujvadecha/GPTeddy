@@ -31,6 +31,7 @@ function apiService(endpoint, method, data) {
       headers: {
         Authorization: window.localStorage.getItem("token"),
         'Content-Type': 'application/json',
+        // "Access-Control-Allow-Origin": "*",
       },
       params: data
     }
@@ -43,6 +44,7 @@ function apiService(endpoint, method, data) {
       headers: {
         Authorization: window.localStorage.getItem("token"),
         'Content-Type': 'application/json',
+        // "Access-Control-Allow-Origin": "*",
       },
       data: data
     }

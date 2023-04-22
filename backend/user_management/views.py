@@ -7,7 +7,7 @@ from rest_framework.decorators import action
 
 from user_management.serializers import PromptSerializer
 
-from backend.user_management.models import Prompts
+from user_management.models import Prompts
 
 
 # Create your views here.
