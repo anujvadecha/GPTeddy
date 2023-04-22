@@ -25,7 +25,7 @@ class PromptAPIView(viewsets.ViewSet):
     @action(detail=False, methods=['post'], url_path='update_prompt', url_name='update_prompt')
     def post(self, request):
         data = request.data
-        data["user"] = request.user
+        data["user"] = request.user.id
         serializer = PromptSerializer(data=data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
