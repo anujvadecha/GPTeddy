@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import Home from './pages/Home';
@@ -7,9 +7,17 @@ import Dashboard from './pages/Dashboard';
 import EducationalControls from './components/EducationalControls';
 import Chats from './components/Chats';
 import AnalyticsComponent from './components/AnalyticsComponent';
-
+import { loginAdminUser } from "./utilities/api_calls.js"
 
 const App = () => {
+
+  useEffect(() => {
+    loginAdminUser().then(res => {
+      window.localStorage.setItem("token", "Bearer " + res.access)
+    })
+  }, [])
+
+
   return (
     <Router>
       <div className="flex flex-col h-screen">
