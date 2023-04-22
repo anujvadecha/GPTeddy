@@ -6,19 +6,20 @@
 # You may obtain a copy of the License in the LICENSE file at the top
 # level of this repository.
 
-
-import ast
-import copy
-import os
 import sys
-
-import cohere
-import emoji
-import streamlit as st
-
-from conversant.demo import ui, utils
-from conversant.prompt_chatbot import PERSONA_MODEL_DIRECTORY, PromptChatbot
+sys.path.append('/Users/akshgarg/Downloads/sandbox-conversant-lib/')
 from conversant.utils import demo_utils
+from conversant.prompt_chatbot import PERSONA_MODEL_DIRECTORY, PromptChatbot
+from conversant.demo import ui, utils
+import streamlit as st
+import emoji
+import cohere
+import os
+import copy
+import ast
+
+
+
 
 # Set a custom persona directory by changing the following line
 # e.g. "/Users/yourname/custom-personas"
@@ -109,7 +110,8 @@ def update_prompt_from_json() -> None:
     """Evaluates JSON string and updates the session's bot prompt."""
     if st.session_state.json_editor_input:
         try:
-            prompt_config = ast.literal_eval(st.session_state.json_editor_input)
+            prompt_config = ast.literal_eval(
+                st.session_state.json_editor_input)
             st.session_state.bot.prompt.update(prompt_config)
             update_session_with_prompt()
             st.session_state.error = ""
@@ -165,7 +167,8 @@ if __name__ == "__main__":
             sys.argv[1], cohere.Client(os.environ.get("COHERE_API_KEY"))
         )
         if not isinstance(bot, PromptChatbot):
-            raise TypeError("base64 string passed in is not of class PromptChatbot")
+            raise TypeError(
+                "base64 string passed in is not of class PromptChatbot")
         else:
             st.session_state.bot = bot
             st.session_state.persona_options.insert(
