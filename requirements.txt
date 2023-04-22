@@ -15,7 +15,6 @@ cryptography==40.0.2
 daphne==4.0.0
 Django==4.1.7
 django-admirarchy==1.2.2
-django-channels==0.7.0
 django-choices==1.7.2
 django-cors-headers==3.14.0
 django-environ==0.10.0
