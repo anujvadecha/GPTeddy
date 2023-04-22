@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<script src="https://code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
+{% extends "admin/change_form.html" %}
+{% load static %}
+{% block extrahead %}
+{{ block.super }}
+{% endblock %}
+{% block content %}
+    {{ block.super}}
+
+    <form>
+        <div>Title</div>
+        <input type="text" name="title" id="title">
+        <div>Time</div>
+        <input type="text" name="time" id="time">
+        <div>Description</div>
+        <input type="text" name="description" id="description">
+
+    </form>
+{% endblock %}
