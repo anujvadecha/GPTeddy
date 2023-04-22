@@ -70,3 +70,4 @@ urllib3==1.26.15
 views==0.3
 whitenoise==6.4.0
 zope.interface==6.0
+gunicorn==20.1.0
