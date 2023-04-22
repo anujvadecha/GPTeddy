@@ -15,6 +15,10 @@ const App = () => {
     loginAdminUser().then(res => {
       window.localStorage.setItem("token", "Bearer " + res.access)
     })
+
+    console.log("component mount")
+
+
   }, [])
 
 
@@ -36,19 +40,18 @@ const App = () => {
         <Routes>
           <Route exact path="/" component={Home} />
           <Route path="/login" component={Login} />
-          {/* <PrivateRoute path="/dashboard" component={Dashboard} /> */}
-        </Routes>
+          <Route path="/dashboard" element={<PrivateRoute component={Dashboard} />} />        </Routes>
       </div>
     </Router>
   );
 }
 
-// const PrivateRoute = ({ component: Component, ...rest }) => (
-//   <Route {...rest} render={(props) => (
-//     localStorage.getItem('user')
-//       ? <Component {...props} />
-//       : <Navigate to='/login' />
-//   )} />
-// )
+const PrivateRoute = ({ component: Component, ...rest }) => (
+  <Route {...rest} render={(props) => (
+    localStorage.getItem('token')
+      ? <Component {...props} />
+      : <Navigate to='/login' />
+  )} />
+)
 
 export default App;
