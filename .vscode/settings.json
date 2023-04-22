@@ -1,0 +1,4 @@
+{
+    "appService.defaultWebAppToDeploy": "undefined/subscriptions/6b433d46-aea7-4450-be48-96c58cde9e9b/resourceGroups/appsvc_linux_centralus/providers/Microsoft.Web/sites/gpteddy-frontend",
+    "appService.deploySubpath": "."
+}

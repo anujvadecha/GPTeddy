@@ -1,7 +1,34 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Select from 'react-select';
+import { submitPrompt, getPrompt } from '../utilities/api_calls';
+
 
 const EducationalControls = () => {
+
+    useEffect(() => {
+        async function fetchData() {
+            const { age, message_count, personality, subjects } = await getPrompt()
+            console.log(subjects)
+
+            console.log(age, JSON.parse(subjects))
+            setAge(String(age))
+            setMessageCount(String(message_count))
+            setPersonality(personality)
+            // setSelectedSubjects(subjects)
+
+
+            setSelectedSubjects(JSON.parse(subjects).map((subject) => {
+
+                return { value: subject, label: subject }
+            }))
+
+        }
+        fetchData()
+    }, []);
+
+
+
+
     const [personality, setPersonality] = useState('');
     const [age, setAge] = useState('');
     const [messageCount, setMessageCount] = useState('');
@@ -9,7 +36,7 @@ const EducationalControls = () => {
 
     const [selectedSubjects, setSelectedSubjects] = useState([]);
 
-    const options = [
+    const subjects = [
         { value: 'math', label: 'Math' },
         { value: 'geography', label: 'Geography' },
         { value: 'history', label: 'History' },
@@ -18,12 +45,13 @@ const EducationalControls = () => {
         { value: 'art', label: 'Art' },
     ];
 
-    const handleChange = (selectedOptions) => {
-        setSelectedSubjects(selectedOptions);
+    const handleChange = (selectedSubjects) => {
+        setSelectedSubjects(selectedSubjects);
     };
 
     const handleRemove = (removedOption) => {
         setSelectedSubjects(selectedSubjects.filter((option) => option.value !== removedOption.value));
+        console.log("after removing subject", selectedSubjects)
     };
 
     const handleInputChange = (event) => {
@@ -31,7 +59,7 @@ const EducationalControls = () => {
         if (name === 'personality') {
             setPersonality(value);
         } else if (name === 'selectedSubjects') {
-            setSelectedSubjects(Array.from(event.target.selectedOptions, (option) => option.value));
+            setSelectedSubjects(Array.from(event.target.selectedSubjects, (option) => option.value));
         } else if (name === 'age') {
             setAge(value);
         } else if (name === 'messageCount') {
@@ -44,18 +72,28 @@ const EducationalControls = () => {
         event.preventDefault();
         // Here you can handle the form submission
         setIsDirty(false);
+        const payload = {
+            "personality": personality || "Cute bear",
+            "age": parseInt(age) || 0,
+            // TODO remove toString
+            "subjects": selectedSubjects.map(subject => subject.label),
+            "message_count": parseInt(messageCount) || 0
+        }
+
+        console.log(payload);
+        submitPrompt(payload)
     };
 
     return (
-        <div className="flex flex-col items-center mt-5 h-screen bg-gray-100">
+        <div className="flex flex-col items-center h-screen mt-5 bg-gray-100">
             <img
                 src="https://via.placeholder.com/150"
                 alt="Teddy Bear"
-                className="rounded-full h-40 w-40 border-2 border-blue-500 mb-4"
+                className="w-40 h-40 mb-4 border-2 border-blue-500 rounded-full"
             />
             <form onSubmit={handleSubmit} className="w-full max-w-md">
                 <div className="mb-4">
-                    <label htmlFor="personality" className="block font-bold mb-2">
+                    <label htmlFor="personality" className="block mb-2 font-bold">
                         Teddy Bear Personality
                     </label>
                     <textarea
@@ -67,40 +105,19 @@ const EducationalControls = () => {
                     ></textarea>
                 </div>
 
-
                 <div className="mb-4">
-                    <label htmlFor="subjects" className="block font-bold mb-2">
+                    <label htmlFor="subjects" className="block mb-2 font-bold">
                         Subjects
                     </label>
                     <Select
-                        id="subjects"
-                        name="subjects"
-                        value={selectedSubjects}
-                        options={options}
-                        onChange={handleChange}
                         isMulti
-                        className="w-full"
+                        options={subjects}
+                        onChange={handleChange}
                     />
-                    <div className="flex flex-wrap mt-2">
-                        {selectedSubjects.map((option) => (
-                            <div key={option.value} className="inline-flex items-center bg-gray-200 rounded-md px-2 py-1 mt-2 mr-2">
-                                <span className="text-sm font-medium text-gray-800 mr-1">{option.label}</span>
-                                <button type="button" className="text-gray-600 hover:text-gray-800 focus:outline-none" onClick={() => handleRemove(option)}>
-                                    <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24">
-                                        <path
-                                            fillRule="evenodd"
-                                            d="M12 2C6.485 2 2 6.485 2 12s4.485 10 10 10 10-4.485 10-10S17.515 2 12 2zm4.95 12.243l-1.707 1.707L12 13.414l-3.243 3.536-1.707-1.707L10.293 12 6.757 8.464l1.707-1.707L12 10.586l3.536-3.243 1.707 1.707L13.707 12l3.536 3.536z"
-                                            clipRule="evenodd"
-                                        />
-                                    </svg>
-                                </button>
-                            </div>
-                        ))}
-                    </div>
                 </div>
 
                 <div className="mb-4">
-                    <label htmlFor="age" className="block font-bold mb-2">
+                    <label htmlFor="age" className="block mb-2 font-bold">
                         Age
                     </label>
                     <input
@@ -113,7 +130,7 @@ const EducationalControls = () => {
                     />
                 </div>
                 <div className="mb-4">
-                    <label htmlFor="messageCount" className="block font-bold mb-2">
+                    <label htmlFor="messageCount" className="block mb-2 font-bold">
                         Message Count
                     </label>
                     <div className="flex items-center justify-between">
@@ -126,15 +143,15 @@ const EducationalControls = () => {
                             onChange={handleInputChange}
                         />
 
-                        <span className="text-sm text-gray-400 ml-2">messages/day</span>
+                        <span className="ml-2 text-sm text-gray-400">messages/day</span>
                     </div>
                 </div>
 
-                <button className="bg-blue-500 text-white rounded-lg px-4 py-2 mt-4">
+                <button className="px-4 py-2 mt-4 text-white bg-blue-500 rounded-lg">
                     Save
                 </button>
                 {isDirty && (
-                    <span className="text-sm text-gray-400 ml-2">*unsaved changes</span>
+                    <span className="ml-2 text-sm text-gray-400">*unsaved changes</span>
                 )}
             </form>
         </div>

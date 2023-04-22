@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 
+
 const Messages = () => {
     const [messages, setMessages] = useState([
         {
@@ -29,7 +30,7 @@ const Messages = () => {
     ]);
 
     return (
-        <div className="flex flex-col flex-1 overflow-y-auto px-4 py-6">
+        <div className="flex flex-col flex-1 px-4 py-6 overflow-y-auto">
             {messages.map((message, index) => (
                 <div
                     key={index}
@@ -37,7 +38,7 @@ const Messages = () => {
                 >
                     {
                         message.user === 'kid' ? (<>
-                            <div className={`max-w-xs rounded-lg px-4 py-2 ${message.user === 'kid' ? 'bg-brown-500 text-white' : 'bg-gray-200 text-gray-800'}`}>
+                            <div className={`max-w-xs rounded-lg px-4 py-2 ${message.user === 'kid' ? 'bg-orange-300 text-gray-800' : 'bg-brown-500 text-white'}`}>
                                 <p className={`${message.user === 'kid' ? 'font-medium' : ''}`}>{message.text}</p>
                             </div> <img
                                 src={message.imageUrl}
@@ -47,7 +48,7 @@ const Messages = () => {
                                 src={message.imageUrl}
                                 alt={message.name}
                                 className={`h-8 w-8 rounded-full ${message.user === 'kid' ? 'ml-2' : 'mr-2'}`}
-                            />   <div className={`max-w-xs rounded-lg px-4 py-2 ${message.user === 'kid' ? 'bg-blue-500 text-white' : 'bg-orange-300 text-gray-800'}`}>
+                            />   <div className={`max-w-xs rounded-lg px-4 py-2 ${message.user === 'kid' ? 'bg-orange-300 text-gray-800' : 'bg-brown-500 text-white'}`}>
                                     <p className={`${message.user === 'kid' ? 'font-medium' : ''}`}>{message.text}</p>
                                 </div>
                             </>)

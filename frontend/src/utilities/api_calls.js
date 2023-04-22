@@ -14,13 +14,13 @@ function loginAdminUser() {
     return apiService(endpoint, 'POST', user)
 }
 
-function submitPrompt(data){
-    const endpoint = base_url+'/user/prompts/update_prompt/'
+function submitPrompt(data) {
+    const endpoint = base_url + '/user/prompts/update_prompt/'
     return apiService(endpoint, 'POST', data)
 }
 
-function getPrompt(){
-    const endpoint = base_url+'/user/prompts/get_prompt/'
+function getPrompt() {
+    const endpoint = base_url + '/user/prompts/get_prompt/'
     return apiService(endpoint, 'GET', null)
 }
 
