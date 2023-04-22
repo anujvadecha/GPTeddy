@@ -1,6 +1,6 @@
 import { apiService } from './api.service.js'
 
-const base_url = 'http://c189-131-179-58-112.ngrok.io'
+const base_url = 'http://localhost:8000'
 // const base_websocket_url = 'admin.starskillgame.com'
 // const base_url = 'http://localhost:9000'
 // const base_websocket_url = 'localhost:9000'

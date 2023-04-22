@@ -3,7 +3,7 @@ import json
 from rest_framework import serializers
 
 from user_management.models import Prompts
-
+import json
 
 class PromptSerializer(serializers.ModelSerializer):
     subjects = serializers.SerializerMethodField(read_only=True)
@@ -15,8 +15,10 @@ class PromptSerializer(serializers.ModelSerializer):
     #     for filter in filters:
     #         Filters.objects.create(prompt = prompt, **filter)
     #     return prompt
+
     def get_subjects(self, obj):
         return json.loads(obj.subjects)
+
 
     class Meta:
         model = Prompts
