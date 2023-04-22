@@ -28,6 +28,8 @@ class PromptAPIView(viewsets.ViewSet):
     def post(self, request):
         data = request.data
         data["user"] = request.user.id
+        # List to comma seperated string
+        data["subjects"] = request.data["subjects"].join(",")
         serializer = PromptSerializer(data=data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
