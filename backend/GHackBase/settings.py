@@ -211,6 +211,7 @@ SPECTACULAR_SETTINGS = {
     'SERVE_INCLUDE_SCHEMA': False,
     # OTHER SETTINGS
 }
+
 CHANNEL_LAYERS = {
     "default": {
         "BACKEND": "channels_redis.core.RedisChannelLayer",
@@ -219,4 +220,5 @@ CHANNEL_LAYERS = {
         },
     },
 }
+
 ASGI_APPLICATION = "GHackBase.asgi.application"

@@ -3,6 +3,9 @@ import json
 from asgiref.sync import async_to_sync
 from channels.generic.websocket import WebsocketConsumer
 
+from chat.models import ChatModel
+from chat.serializers import ChatSerializer
+
 
 class ChatConsumer(WebsocketConsumer):
     def connect(self):
@@ -15,6 +18,11 @@ class ChatConsumer(WebsocketConsumer):
         )
 
         self.accept()
+        self.user = self.scope["user"]
+        data = ChatSerializer(ChatModel.objects.all(), many=True).data
+        async_to_sync(self.channel_layer.group_send)(
+            self.room_group_name, {"type": "chat_message", "message": data}
+        )
 
     def disconnect(self, close_code):
         # Leave room group
