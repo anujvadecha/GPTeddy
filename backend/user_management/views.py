@@ -42,6 +42,8 @@ class PromptAPIView(viewsets.ViewSet):
     def get(self, request):
         print(request.user)
         prompt = Prompts.objects.filter(user=request.user.id).first()
+        if prompt is None:
+            return Response({})
         serializer = PromptSerializer(prompt)
         data = serializer.data
         data['subjects'] = json.loads(data['subjects'])

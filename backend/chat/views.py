@@ -18,7 +18,7 @@ class ChatAPIView(viewsets.ViewSet):
         # TODO add response to database
         data = request.data
         user = request.user
-        chat = ChatModel.objects.create(user=user, message=data.get("message"), from_user=ChatUser.user)
+        chat = ChatModel.objects.create(user=user, message=data.get("message"), from_user=data.get('from_user'))
         return Response(ChatSerializer(chat).data)
 
 
