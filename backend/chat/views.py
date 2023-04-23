@@ -54,7 +54,7 @@ class ChatAPIView(viewsets.ViewSet):
         chat_teddy = ChatModel.objects.create(user=user, message=response_text, from_user=ChatUser.teddy)
         channel_layer = get_channel_layer()
         from asgiref.sync import async_to_sync
-        data_to_send = [ChatSerializer(chat_user).data, ChatSerializer(chat_teddy).data]
+        data_to_send = [ ChatSerializer(chat_teddy).data, ChatSerializer(chat_user).data]
         async_to_sync(channel_layer.group_send)(
             'chat_teddy', {"type": "chat_message", "message": data_to_send}
         )
