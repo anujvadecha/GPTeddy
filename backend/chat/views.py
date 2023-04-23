@@ -12,7 +12,7 @@ from rest_framework.response import Response
 
 from user_management.models import Prompts
 from channels.layers import get_channel_layer
-
+import rest_framework.status
 class ChatAPIView(viewsets.ViewSet):
 
     @action(methods=['post'], detail=False, url_path="speak", url_name="speak",)
@@ -59,6 +59,28 @@ class ChatAPIView(viewsets.ViewSet):
             'chat_teddy', {"type": "chat_message", "message": data_to_send}
         )
         return Response(ChatSerializer(chat_teddy).data)
+
+from rest_framework import viewsets
+from rest_framework.parsers import MultiPartParser, FormParser
+from .models import PDFFile
+from .serializers import PDFFileSerializer
+
+class PDFFileViewSet(viewsets.ModelViewSet):
+    queryset = PDFFile.objects.all()
+    serializer_class = PDFFileSerializer
+    parser_classes = (MultiPartParser, FormParser)
+
+    def create(self, request, *args, **kwargs):
+        from rest_framework import status
+        file = request.FILES.get('file')
+        if file:
+            pdf_file = PDFFile(file=file)
+            pdf_file.save()
+            serializer = PDFFileSerializer(pdf_file)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        else:
+            return Response({'error': 'No file found'}, status=status.HTTP_200_OK)
+
 
 
 def index(request):

@@ -19,3 +19,10 @@ class ChatSerializer(serializers.ModelSerializer):
         model = ChatModel
         fields = ('message', 'from_user', 'created_at', 'image_url')
 
+from rest_framework import serializers
+from .models import PDFFile
+
+class PDFFileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = PDFFile
+        fields = '__all__'

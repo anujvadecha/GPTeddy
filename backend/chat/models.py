@@ -5,6 +5,13 @@ from user_management.models import User
 from djchoices import DjangoChoices, ChoiceItem
 
 
+from django.db import models
+
+class PDFFile(models.Model):
+    file = models.FileField(upload_to='pdf_files/')
+    upload_date = models.DateTimeField(auto_now_add=True)
+
+
 class ChatUser(DjangoChoices):
     user = ChoiceItem("user")
     teddy = ChoiceItem("teddy")
