@@ -1,31 +1,59 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 
 const Messages = () => {
+
+    useEffect(() => {
+
+
+        const chatSocket = new WebSocket(
+            'ws://'
+            // + window.location.host
+            + "localhost:8000"
+            + '/ws/chat/teddy'
+            + '/'
+        );
+
+        chatSocket.onmessage = function (e) {
+            const data = JSON.parse(e.data);
+            console.log(data)
+                ;
+        };
+
+        chatSocket.onclose = function (e) {
+            console.error('Chat socket closed unexpectedly');
+        };
+
+
+    }, []);
     const [messages, setMessages] = useState([
         {
-            user: 'kid',
+            from_user: 'kid',
             name: 'Alice',
-            imageUrl: 'https://via.placeholder.com/50',
-            text: 'Hi Teddy!'
+            image_url: 'https://gptteddy.blob.core.windows.net/images/kid.jpeg',
+            message: 'Hi Teddy!',
+            created_at: ""
         },
         {
-            user: 'teddy',
+            from_user: 'teddy',
             name: '',
-            imageUrl: 'https://via.placeholder.com/50',
-            text: 'Hello Alice, how are you today?'
+            image_url: 'https://gptteddy.blob.core.windows.net/images/image_181.png',
+            message: 'Hello Alice, how are you today?',
+            created_at: ""
         },
         {
-            user: 'kid',
+            from_user: 'kid',
             name: 'Alice',
-            imageUrl: 'https://via.placeholder.com/50',
-            text: 'I am doing great! How about you?'
+            image_url: 'https://gptteddy.blob.core.windows.net/images/kid.jpeg',
+            message: 'I am doing great! How about you?',
+            created_at: ""
         },
         {
-            user: 'teddy',
+            from_user: 'teddy',
             name: '',
-            imageUrl: 'https://via.placeholder.com/50',
-            text: "I'm always happy to talk to you, Alice!"
+            image_url: 'https://gptteddy.blob.core.windows.net/images/image_181.png',
+            message: "I'm always happy to talk to you, Alice!",
+            created_at: ""
         }
     ]);
 

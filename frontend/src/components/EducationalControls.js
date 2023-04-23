@@ -87,9 +87,9 @@ const EducationalControls = () => {
     return (
         <div className="flex flex-col items-center h-screen mt-5 bg-gray-100">
             <img
-                src="https://via.placeholder.com/150"
+                src="https://gptteddy.blob.core.windows.net/images/teddy_bear%201.png"
                 alt="Teddy Bear"
-                className="w-40 h-40 mb-4 border-2 border-blue-500 rounded-full"
+                className="w-40 h-40 mb-4 rounded-full border-5 border-brown-500"
             />
             <form onSubmit={handleSubmit} className="w-full max-w-md">
                 <div className="mb-4">
