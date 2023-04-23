@@ -48,29 +48,25 @@ class ChatAPIView(viewsets.ViewSet):
 
         last_chat_request_id = prompt.chat_request_id
         bot = cohere.Client(api_key=cohere_api_key_free)
-        #TODO  prompt identification for pdfs
-        # top_k = 40
-        # print(class_index.__name__)
-        # res = query_pinecone(class_index, text, top_k=top_k)
-        # print(res)
-        # num_def = [x["metadata"]['Task'] for x in res.matches].count("Default")
-        # print(num_def)
-        # print(text)
-        # if num_def / top_k < 0.5:
-        #     context_k = 5
-        #     res = query_pinecone(context_index, text, top_k=context_k)
-        #     pdf_context = [x[1] for x in sorted([(x['id'], x["metadata"]['Context']) for x in res.matches])]
-        # else:
-        #     pdf_context = None
-        # if pdf_context:
-        #     print("using pdf context")
-        #     personality = pdf_prompt(name, age, subjects, pdf_context)
-        # else:
-        #     print("using default context")
-        #     personality = prompt_no_pdf(name, age, subjects)
+        # TODO  prompt identification for pdfs
+        top_k = 5
+        res = query_pinecone(class_index, text, top_k=top_k)
+        num_def = [x["metadata"]['Task'] for x in res.matches].count("Default")
+        if num_def / top_k < 0.5:
+            context_k = 5
+            res = query_pinecone(context_index, text, top_k=context_k)
+            pdf_context = [x[1] for x in sorted([(x['id'], x["metadata"]['Context']) for x in res.matches])]
+        else:
+            pdf_context = None
+        if pdf_context:
+            print("using pdf context")
+            personality = pdf_prompt(name, age, subjects, pdf_context)
+        else:
+            print("using default context")
+            personality = prompt_no_pdf(name, age, subjects)
         prompt.personality = personality
         prompt.save()
-        print("Prompt: ", personality)
+        print("Prompt")
         res = bot.chat(query=text,
                        preamble_override=personality,
                        conversation_id=last_chat_request_id if last_chat_request_id else None,
