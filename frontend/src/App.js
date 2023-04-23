@@ -16,9 +16,6 @@ const App = () => {
       window.localStorage.setItem("token", "Bearer " + res.access)
     })
 
-    console.log("component mount")
-
-
   }, [])
 
 
@@ -27,13 +24,13 @@ const App = () => {
       <div className="flex flex-col h-screen">
         <Navbar />
         <div className="flex flex-1">
-          <div className="w-1/5 bg-gray-200">
+          <div className="w-1/5 bg-orange-100">
             <EducationalControls></EducationalControls>
           </div>
           <div className="w-3/5 bg-white">
             <Chats></Chats>
           </div>
-          <div className="w-1/5 bg-gray-200">
+          <div className="w-1/5 bg-orange-100">
             <AnalyticsComponent></AnalyticsComponent>
           </div>
         </div>

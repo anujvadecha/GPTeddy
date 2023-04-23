@@ -3,7 +3,7 @@
 const chatSocket = new WebSocket(
     'ws://'
     // + window.location.host
-    + "localhost:8000"
+    + "20.232.156.33"
     + '/ws/chat/teddy'
     + '/'
 );
