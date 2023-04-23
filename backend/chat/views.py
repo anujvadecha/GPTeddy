@@ -33,7 +33,7 @@ class ChatAPIView(viewsets.ViewSet):
         prompt = Prompts.objects.filter(user=request.user).first()
         if prompt is None:
             data = {"name": request.user.username, "subjects": ["Math", "History", "Science"], }
-            personality = default_prompt(name=request.user.username, age=14)
+            personality = default_prompt(name="Aksh", age=14)
             prompt = Prompts.objects.create(personality=personality, user=request.user, subjects=json.dumps(data["subjects"]))
         age = prompt.age
         name = request.user.username
