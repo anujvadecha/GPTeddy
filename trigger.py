@@ -5,7 +5,7 @@ from pvrecorder import PvRecorder
 keywords = ['hey teddy']
 porcupine = pvporcupine.create(
   access_key='2gswBAKLbrVawQqJ8TzK5l772av6VXbqHvz0D9Nz2+KOBKB6kBxy6w==',
-  keyword_paths=['HeyTeddyRasp/Hey-Teddy_en_raspberry-pi_v2_2_0.ppn']
+  keyword_paths=['HeyTeddy/Hey-Teddy_en_mac_v2_2_0.ppn']
 )
 
 # porcupine = pvporcupine.create(access_key=access_key, keywords=keywords)
