@@ -66,7 +66,7 @@ class ChatAPIView(viewsets.ViewSet):
             personality = prompt_no_pdf(name, age, subjects)
         prompt.personality = personality
         prompt.save()
-        print("Prompt")
+        print("Prompt", personality)
         res = bot.chat(query=text,
                        preamble_override=personality,
                        conversation_id=last_chat_request_id if last_chat_request_id else None,
