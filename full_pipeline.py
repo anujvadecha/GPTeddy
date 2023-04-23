@@ -1,3 +1,4 @@
+from cohere_client import launch_cohere_chatbot
 import pvporcupine
 from pvrecorder import PvRecorder
 
@@ -13,11 +14,18 @@ recoder = PvRecorder(device_index=-1, frame_length=porcupine.frame_length)
 
 try:
     recoder.start()
-
     while True:
         keyword_index = porcupine.process(recoder.read())
         if keyword_index >= 0:
+            recoder.stop()
             print(f"Detected {keywords[keyword_index]}")
+            # TODO (akgarg) query from the database
+            age = 5
+            name = "Arnav"
+            learning_goals = ['science', 'US History', 'Scratch Coding']
+            launch_cohere_chatbot(age, name, learning_goals)
+        recoder.start()
+
 
 except KeyboardInterrupt:
     recoder.stop()

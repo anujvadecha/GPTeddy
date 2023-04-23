@@ -19,11 +19,16 @@ def recognize_from_microphone():
         return speech_recognition_result.text
     elif speech_recognition_result.reason == speechsdk.ResultReason.NoMatch:
         print("No speech could be recognized: {}".format(speech_recognition_result.no_match_details))
+        return "Error NoMatch"
     elif speech_recognition_result.reason == speechsdk.ResultReason.Canceled:
         cancellation_details = speech_recognition_result.cancellation_details
         print("Speech Recognition canceled: {}".format(cancellation_details.reason))
         if cancellation_details.reason == speechsdk.CancellationReason.Error:
             print("Error details: {}".format(cancellation_details.error_details))
             print("Did you set the speech resource key and region values?")
+            return "Error Credentials"
+        return "Error Cancelled"
 
-recognized_text = recognize_from_microphone()
+if __name__ == "__main__":
+    recognized_text = recognize_from_microphone()
+    print(recognized_text)
