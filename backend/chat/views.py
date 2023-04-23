@@ -5,7 +5,7 @@ from django.shortcuts import render
 from rest_framework import viewsets
 from rest_framework.decorators import action
 
-from GHackBase.settings import cohere_api_key_free
+from GHackBase.settings import cohere_api_key_free, default_prompt
 from chat.models import ChatModel, ChatUser
 from chat.serializers import ChatSerializer
 from rest_framework.response import Response
@@ -26,18 +26,20 @@ class ChatAPIView(viewsets.ViewSet):
         user = request.user
         text = data["message"]
         prompt = Prompts.objects.filter(user=request.user).first()
+        if prompt is None:
+            data = {"name": request.user.username, "subjects": ["Math", "History", "Science"], }
+            personality = default_prompt(name=request.user.username, age=14)
+            prompt = Prompts.objects.create(personality=personality, user=request.user, subjects=json.dumps(data["subjects"]))
         age = prompt.age
         name = request.user.username
         subjects = json.loads(prompt.subjects)
         personality = prompt.personality
-
         if "bye" in text.lower():
             last_chat_request_id = None
             prompt.chat_request_id = last_chat_request_id
             prompt.save()
             chat_teddy = ChatModel.objects.create(user=user, message="STOP we have talked enough today", from_user=ChatUser.teddy)
             return Response(ChatSerializer(chat_teddy).data)
-
         last_chat_request_id = prompt.chat_request_id
         bot = cohere.Client(api_key=cohere_api_key_free)
         res = bot.chat(query=text,
@@ -48,7 +50,7 @@ class ChatAPIView(viewsets.ViewSet):
         if not last_chat_request_id:
             prompt.chat_request_id = res.conversation_id
             prompt.save()
-        chat_user = ChatModel.objects.create(user=user, message=data.get("message"), from_user=ChatUser.user)
+        chat_user = ChatModel.objects.create(user=user, message=text, from_user=ChatUser.user)
         chat_teddy = ChatModel.objects.create(user=user, message=response_text, from_user=ChatUser.teddy)
         return Response(ChatSerializer(chat_teddy).data)
 
