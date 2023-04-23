@@ -11,7 +11,7 @@ from chat.serializers import ChatSerializer
 from rest_framework.response import Response
 
 from user_management.models import Prompts
-
+from channels.layers import get_channel_layer
 
 class ChatAPIView(viewsets.ViewSet):
 
@@ -52,6 +52,12 @@ class ChatAPIView(viewsets.ViewSet):
             prompt.save()
         chat_user = ChatModel.objects.create(user=user, message=text, from_user=ChatUser.user)
         chat_teddy = ChatModel.objects.create(user=user, message=response_text, from_user=ChatUser.teddy)
+        channel_layer = get_channel_layer()
+        from asgiref.sync import async_to_sync
+        data_to_send = [ChatSerializer(chat_user).data, ChatSerializer(chat_teddy).data]
+        async_to_sync(channel_layer.group_send)(
+            'chat_teddy', {"type": "chat_message", "message": data_to_send}
+        )
         return Response(ChatSerializer(chat_teddy).data)
 
 

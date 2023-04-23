@@ -1,8 +1,7 @@
 from chat.models import ChatModel
-
 from rest_framework import serializers
-
 from chat.models import ChatUser
+
 
 message = "hello"
 

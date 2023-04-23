@@ -31,9 +31,11 @@ class PromptAPIView(viewsets.ViewSet):
     def post(self, request):
         data = request.data
         data["user"] = request.user.id
+        name = request.user.username
         # List to comma seperated string
         print(data['subjects'])
         data["subjects"] = json.dumps(data["subjects"])
+        data["personality"] = default_prompt(name, data["age"], data["subjects"])
         serializer = PromptSerializer(data=data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
@@ -41,7 +43,6 @@ class PromptAPIView(viewsets.ViewSet):
 
     @action(detail=False, methods=['get'], url_path='get_prompt', url_name='get_prompt')
     def get(self, request):
-        print(request.user)
         prompt = Prompts.objects.filter(user=request.user.id).first()
         if prompt is None:
             data = {"name": request.user.username, "subjects": ["Math", "History", "Science"],}
