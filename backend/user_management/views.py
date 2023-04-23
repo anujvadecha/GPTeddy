@@ -7,6 +7,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.decorators import action
 
+from GHackBase.settings import default_prompt
 from user_management.serializers import PromptSerializer
 
 from user_management.models import Prompts
@@ -43,7 +44,9 @@ class PromptAPIView(viewsets.ViewSet):
         print(request.user)
         prompt = Prompts.objects.filter(user=request.user.id).first()
         if prompt is None:
-            return Response({})
+            data = {"name": request.user.username, "subjects": ["Math", "History", "Science"],}
+            prompt = default_prompt(request.user.username, 14)
+            prompt = Prompts.objects.create(personality=prompt, user=request.user, subjects=data["subjects"])
         serializer = PromptSerializer(prompt)
         data = serializer.data
         data['subjects'] = json.loads(data['subjects'])
