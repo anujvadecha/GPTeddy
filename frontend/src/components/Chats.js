@@ -14,7 +14,7 @@ const Messages = () => {
         const chatSocket = new WebSocket(
             'ws://'
             // + window.location.host
-            + "localhost:8000"
+            + "20.232.156.33"
             + '/ws/chat/teddy'
             + '/'
         );
@@ -34,8 +34,14 @@ const Messages = () => {
 
     }, []);
 
-    return (
+    return (<>
+        <h1 className='pb-3 mt-5 text-4xl font-bold text-center bold'>Learning Journey</h1>
+
+        <div className='w-full pb-3 mt-5 border-t border-gray-400'></div>
+
         <div className="flex flex-col flex-1 px-4 py-6 overflow-y-auto">
+
+
             {messages.map((message, index) => (
                 <div
                     key={index}
@@ -63,6 +69,7 @@ const Messages = () => {
                 </div>
             ))}
         </div>
+    </>
     );
 }
 
