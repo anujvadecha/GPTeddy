@@ -18,18 +18,20 @@ PINECONE_G = "3e831f98-64ec-440b-b0bb-f8af39910a0a"
 # create a gitignore
 
 
-def pinecone_init(ID):
+def pinecone_init(ID, pinecone_key):
     pinecone.init(
-        api_key=PINECONE_G,
+        api_key=pinecone_key,
         environment="northamerica-northeast1-gcp"
     )
 
     if ID not in pinecone.list_indexes():
         print("index didn't exist")
-        pinecone.create_index(ID, dimension=1536)
+        pinecone.create_index(ID, dimension=4096)
     else:
+        print("index existed")
         pass
         # pinecone.Index(ID).delete(deleteAll='true')
+        # pinecone.create_index(ID, dimension=4096)
 
     index = pinecone.Index(ID)
 
@@ -74,7 +76,7 @@ def gen_batch(index, df):
 
 if __name__ == "__main__":
 
-    index = pinecone_init("teddy")
+    index = pinecone_init("teddy", PINECONE_G)
     df = pd.read_csv('embeddings.csv')
     df['id'] = df.index.astype(str)
 

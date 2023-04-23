@@ -1,24 +1,28 @@
 import pandas as pd
-from pinecone_task import embed, pinecone_init, chunks, gen_batch
+from pinecone_task import embed, pinecone_init, chunks, gen_batch, PINECONE_G
+from pinecone_pdf import PINECONE_V
 import cohere
 import pinecone
+from cohere_client import launch_cohere_chatbot, launch_cohere_chatbot_with_pdf_context, query_pinecone, embed_single, launch_generic_chatbot
 
-def query_pinecone(index, query):
-    embedddings = embed_single(query)
-    res = index.query([embedddings], top_k=3, include_metadata=True)
-    return res
 
-def embed_single(x):
-    api_key = "LgXZaogrwPAluYs3MxwcuyjPlsTF5A3bo9EzwXnf"
-    bot = cohere.Client(api_key=api_key)
-    res = bot.embed(texts = [x])
-    return res.embeddings
 
-<<<<<<< HEAD
-def __main__():
-=======
+
 if __name__ == "__main__":
->>>>>>> dcbb156 (Embedding work.)
-    index = pinecone_init("teddy")
-    res = query_pinecone(index, "Hello, world! This is my prompt. Hopefully it is long enough to be useful.")
-    print(res)
+    class_index = pinecone_init("teddy", PINECONE_G)
+    content_index = pinecone_init("content", PINECONE_V)
+    top_k = 5
+    res = query_pinecone(class_index, "What are your thoughts on math?", top_k=top_k)
+    num_def = [x["metadata"]['Task'] for x in res.matches].count("Default")
+    age = 5
+    name = "Arnav"
+    learning_goals = ['science', 'US History', 'Scratch Coding']
+    if num_def / top_k > 0.5:
+        print("Default")
+        launch_generic_chatbot(age, name, learning_goals, class_index, content_index, None)
+    else:
+        context_k = 5
+        res = query_pinecone(content_index, "Can you summarize the content in the pdf?", top_k=context_k)
+        pdf_context = [x[1] for x in sorted([(x['id'], x["metadata"]['Context']) for x in res.matches])]
+        launch_generic_chatbot(age, name, learning_goals, class_index, content_index, pdf_context)
+        print("PDF")

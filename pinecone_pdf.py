@@ -18,9 +18,9 @@ PINECONE_V = "b98fa19a-b1ba-496f-a6f6-5fd486916f59"
 # create a gitignore
 
 
-def pinecone_init(ID):
+def pinecone_init(ID, pinecone_key):
     pinecone.init(
-        api_key=PINECONE_V,
+        api_key=pinecone_key,
         environment="northamerica-northeast1-gcp"
     )
 
@@ -35,11 +35,45 @@ def pinecone_init(ID):
 
     return index
 
+import PyPDF2
+
+def parse_pdf(path):
+    # Open the PDF file in binary mode
+    with open(path, 'rb') as file:
+        # Create a PDF reader object
+        pdf_reader = PyPDF2.PdfReader(file)
+        # Extract text from each page
+        text = ''
+        for page in pdf_reader.pages:
+            text += page.extract_text()
+    return text
+
+def embed_pdf(pdf_list):
+    for pdf in pdf_list:
+        text = parse_pdf(pdf)
+        bot = cohere.Client(api_key=api_key)
+        ids = []
+        vectors = []
+        metadata = []
+
+        for i, chunk in enumerate(chunks(text, 500)):
+            res = bot.embed(texts = [''.join(chunk)])
+            vector = res.embeddings[0]
+            dict_obj = {
+                "Context": ''.join(chunk),
+            }
+            metadata.append(dict_obj)
+            vectors.append(vector)
+            ids.append(str(i))
+        
+        for ids_vectors_chunk in chunks(zip(ids, vectors, metadata), batch_size=25):
+            index.upsert(vectors=ids_vectors_chunk)
 
 def embed(df):
     text_to_embed = df['Sentence'].tolist()
     bot = cohere.Client(api_key=api_key)
     texts = text_to_embed
+
     res = bot.embed(texts = texts)
     return res.embeddings
 
@@ -73,10 +107,7 @@ def gen_batch(index, df):
 
 
 if __name__ == "__main__":
-
-    index = pinecone_init("teddy")
-    df = pd.read_csv('embeddings.csv')
-    df['id'] = df.index.astype(str)
-
-    gen_batch(index, df)
+    index = pinecone_init("content", PINECONE_V)
+    pdf_list = ["/Users/akshgarg/Downloads/20.pdf"]
+    embed_pdf(pdf_list)
 
