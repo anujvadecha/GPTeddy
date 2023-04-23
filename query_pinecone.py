@@ -14,7 +14,11 @@ def embed_single(x):
     res = bot.embed(texts = [x])
     return res.embeddings
 
+<<<<<<< HEAD
 def __main__():
+=======
+if __name__ == "__main__":
+>>>>>>> dcbb156 (Embedding work.)
     index = pinecone_init("teddy")
     res = query_pinecone(index, "Hello, world! This is my prompt. Hopefully it is long enough to be useful.")
     print(res)
