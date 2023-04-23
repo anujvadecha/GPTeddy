@@ -1,6 +1,6 @@
 import cohere
-from s2t import recognize_from_microphone
-from t2s import convert_text_to_speech
+
+
 api_key = "zz3J8EOXV4vaiMD7GLJ0ImTR9RxCbJegb3uhy2Xo"
 bot = cohere.Client(api_key=api_key)
 
@@ -10,7 +10,9 @@ learning_goals = ['history', 'science', 'dance']
 
 def query_pinecone(index, query, top_k = 5):
     embedddings = embed_single(query)
+    # print(len(embedddings))
     res = index.query([embedddings], top_k=top_k, include_metadata=True)
+    # print(res)
     return res
 
 def embed_single(x):
@@ -38,6 +40,8 @@ def prompt_no_pdf(name, age, learning_goals):
     return prompt
 
 def launch_generic_chatbot(age, name, learning_goals,  class_index, content_index, pdf_context):
+    from s2t import recognize_from_microphone
+    from t2s import convert_text_to_speech
     if pdf_context:
         prompt = pdf_prompt(name, age, learning_goals, pdf_context)
     else:
@@ -52,6 +56,7 @@ def launch_generic_chatbot(age, name, learning_goals,  class_index, content_inde
     print(res.text)
     convert_text_to_speech(res.text)
     input_text = recognize_from_microphone()
+
 
     while "bye" not in input_text:
         res = bot.chat(query = input_text,
@@ -77,7 +82,8 @@ def launch_generic_chatbot(age, name, learning_goals,  class_index, content_inde
 
 
 def launch_cohere_chatbot(age, name, learning_goals):
-    
+    from s2t import recognize_from_microphone
+    from t2s import convert_text_to_speech
     input_text = "Hey Teddy!"
     res = bot.chat(query = input_text,
                     preamble_override=prompt,
@@ -119,6 +125,8 @@ def pdf_prompt(name, age, learning_goals, pdf_context):
 
 
 def launch_cohere_chatbot_with_pdf_context(age, name, learning_goals, pdf_context, content_index):
+    from s2t import recognize_from_microphone
+    from t2s import convert_text_to_speech
     prompt = pdf_prompt(name, age, learning_goals, pdf_context)
 
     input_text = "Hey Teddy!"

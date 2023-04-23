@@ -35,7 +35,7 @@ class PromptAPIView(viewsets.ViewSet):
         # List to comma seperated string
         print(data['subjects'])
         data["subjects"] = json.dumps(data["subjects"])
-        data["personality"] = default_prompt(name, data["age"], data["subjects"])
+        data["personality"] = default_prompt(name, data["subjects"], data["age"]) + data['personality']
         serializer = PromptSerializer(data=data)
         serializer.is_valid(raise_exception=True)
         serializer.save()

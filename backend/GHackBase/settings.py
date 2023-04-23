@@ -14,6 +14,8 @@ from pathlib import Path
 
 from environ import environ
 
+
+
 env = environ.Env(DEBUG=(bool, True), )
 environ.Env.read_env()
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -225,8 +227,15 @@ CHANNEL_LAYERS = {
 ASGI_APPLICATION = "GHackBase.asgi.application"
 cohere_api_key_paid = "zz3J8EOXV4vaiMD7GLJ0ImTR9RxCbJegb3uhy2Xo"
 cohere_api_key_free = "zz3J8EOXV4vaiMD7GLJ0ImTR9RxCbJegb3uhy2Xo"
+from pdfprompts.pinecone_task import pinecone_init, PINECONE_G
 
-def default_prompt(name="Champ", learning_goals=["History", "Maths", "Science"], age=14):
+class_index = pinecone_init('teddy', PINECONE_G)
+from pdfprompts.pinecone_pdf import pinecone_init, PINECONE_V
+
+context_index = pinecone_init('content', PINECONE_V)
+
+
+def default_prompt(name="Champ", learning_goals = ["History", "Maths", "Science"], age=14):
     lg_text = ", ".join(learning_goals[:-1]) + f", and {learning_goals[-1]}"
 
     prompt = f"""You are a teddy bear, called Teddy and you are talking to a {age}-year-old kid, whose name is {name}. You have the following goals: \n 

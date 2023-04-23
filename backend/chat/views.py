@@ -4,14 +4,19 @@ from django.shortcuts import render
 from django.shortcuts import render
 from rest_framework import viewsets
 from rest_framework.decorators import action
-
-from GHackBase.settings import cohere_api_key_free, default_prompt
+from rest_framework import viewsets
+from rest_framework.parsers import MultiPartParser, FormParser
+from .models import PDFFile
+from .serializers import PDFFileSerializer
+from GHackBase.settings import cohere_api_key_free, default_prompt, class_index, context_index
 from chat.models import ChatModel, ChatUser
 from chat.serializers import ChatSerializer
 from rest_framework.response import Response
 
+from pdfprompts.pinecone_pdf import embed_pdf, process_pdf
 from user_management.models import Prompts
 from channels.layers import get_channel_layer
+from pdfprompts.cohere_client import prompt_no_pdf, query_pinecone, pdf_prompt
 import rest_framework.status
 class ChatAPIView(viewsets.ViewSet):
 
@@ -38,10 +43,34 @@ class ChatAPIView(viewsets.ViewSet):
             last_chat_request_id = None
             prompt.chat_request_id = last_chat_request_id
             prompt.save()
-            chat_teddy = ChatModel.objects.create(user=user, message="STOP we have talked enough today", from_user=ChatUser.teddy)
+            chat_teddy = ChatModel.objects.create(user=user, message=f"Bye {user} , it was great talking to you. See you soon! Bear Hugs.", from_user=ChatUser.teddy)
             return Response(ChatSerializer(chat_teddy).data)
+
         last_chat_request_id = prompt.chat_request_id
         bot = cohere.Client(api_key=cohere_api_key_free)
+        #TODO  prompt identification for pdfs
+        # top_k = 40
+        # print(class_index.__name__)
+        # res = query_pinecone(class_index, text, top_k=top_k)
+        # print(res)
+        # num_def = [x["metadata"]['Task'] for x in res.matches].count("Default")
+        # print(num_def)
+        # print(text)
+        # if num_def / top_k < 0.5:
+        #     context_k = 5
+        #     res = query_pinecone(context_index, text, top_k=context_k)
+        #     pdf_context = [x[1] for x in sorted([(x['id'], x["metadata"]['Context']) for x in res.matches])]
+        # else:
+        #     pdf_context = None
+        # if pdf_context:
+        #     print("using pdf context")
+        #     personality = pdf_prompt(name, age, subjects, pdf_context)
+        # else:
+        #     print("using default context")
+        #     personality = prompt_no_pdf(name, age, subjects)
+        prompt.personality = personality
+        prompt.save()
+        print("Prompt: ", personality)
         res = bot.chat(query=text,
                        preamble_override=personality,
                        conversation_id=last_chat_request_id if last_chat_request_id else None,
@@ -60,10 +89,7 @@ class ChatAPIView(viewsets.ViewSet):
         )
         return Response(ChatSerializer(chat_teddy).data)
 
-from rest_framework import viewsets
-from rest_framework.parsers import MultiPartParser, FormParser
-from .models import PDFFile
-from .serializers import PDFFileSerializer
+
 
 class PDFFileViewSet(viewsets.ModelViewSet):
     queryset = PDFFile.objects.all()
@@ -76,6 +102,7 @@ class PDFFileViewSet(viewsets.ModelViewSet):
         if file:
             pdf_file = PDFFile(file=file)
             pdf_file.save()
+            process_pdf([pdf_file.file.path])
             serializer = PDFFileSerializer(pdf_file)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         else:

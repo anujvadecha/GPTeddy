@@ -48,7 +48,8 @@ def parse_pdf(path):
             text += page.extract_text()
     return text
 
-def embed_pdf(pdf_list):
+def embed_pdf(pdf_list, index):
+    print("Embedding PDFs")
     for pdf in pdf_list:
         text = parse_pdf(pdf)
         bot = cohere.Client(api_key=api_key)
@@ -106,8 +107,8 @@ def gen_batch(index, df):
         index.upsert(vectors=ids_vectors_chunk)
 
 
-if __name__ == "__main__":
+def process_pdf(pdf_path_list):
     index = pinecone_init("content", PINECONE_V)
-    pdf_list = ["/Users/akshgarg/Downloads/20.pdf"]
-    embed_pdf(pdf_list)
+    embed_pdf(pdf_path_list, index)
+
 
